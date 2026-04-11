@@ -11,6 +11,15 @@ RUN npm ci --include=dev 2>/dev/null || npm install
 
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
+
+# Build-time env vars needed for Next.js to compile server-side code.
+# These get baked into the standalone server bundle.
+# Runtime values override via container env vars.
+ARG NEXT_PUBLIC_HENRY_API_URL=https://henry.business
+ARG NEXT_PUBLIC_PORTAL_URL=https://henry.uno
+ENV NEXT_PUBLIC_HENRY_API_URL=$NEXT_PUBLIC_HENRY_API_URL
+ENV NEXT_PUBLIC_PORTAL_URL=$NEXT_PUBLIC_PORTAL_URL
+
 RUN npm run build
 
 # Stage 2: Runner
