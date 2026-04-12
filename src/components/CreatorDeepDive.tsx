@@ -2,8 +2,33 @@
 // @ts-nocheck — ported from dashboard-v2/CreatorDeepDive.tsx with Record<string, unknown> props
 
 import { useState, useEffect, useRef, useMemo } from 'react'
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  LineElement,
+  PointElement,
+  Title,
+  Tooltip,
+  Legend,
+  Filler,
+} from 'chart.js'
 import { Bar, Line } from 'react-chartjs-2'
 import * as d3 from 'd3'
+
+// Register Chart.js components
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  LineElement,
+  PointElement,
+  Title,
+  Tooltip,
+  Legend,
+  Filler,
+)
 import {
   AlertTriangle,
   Sparkles,
