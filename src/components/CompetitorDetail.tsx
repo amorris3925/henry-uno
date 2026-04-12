@@ -18,8 +18,8 @@ function formatNumber(n: number | null | undefined): string {
 function pctBar(value: number, max: number, color = "bg-blue-500") {
   const pct = max > 0 ? Math.min((value / max) * 100, 100) : 0;
   return (
-    <div className="w-full bg-gray-100 rounded-full h-2">
-      <div className={`${color} h-2 rounded-full`} style={{ width: `${pct}%` }} />
+    <div className="w-full bg-[var(--bg-primary)] rounded-full h-1.5">
+      <div className={`${color} h-1.5 rounded-full`} style={{ width: `${pct}%` }} />
     </div>
   );
 }
@@ -55,26 +55,26 @@ export default function CompetitorDetail({ data }: { data: CompetitorData }) {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-white rounded-xl border p-6">
+      <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] p-6">
         <div className="flex items-start gap-4">
-          <div className="w-14 h-14 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xl font-bold">
+          <div className="w-14 h-14 rounded-full bg-blue-500/10 text-blue-400 flex items-center justify-center text-xl font-bold">
             {((profile.brand_name as string) || "?")[0].toUpperCase()}
           </div>
           <div className="flex-1">
-            <h1 className="text-xl font-bold text-gray-900">
+            <h1 className="text-xl font-bold text-[var(--text-primary)]">
               {profile.brand_name as string}
             </h1>
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-[var(--text-muted)]">
               @{profile.profile_handle as string} &middot;{" "}
               {profile.platform as string}
             </p>
             {profile.bio ? (
-              <p className="text-sm text-gray-600 mt-2">
+              <p className="text-sm text-[var(--text-secondary)] mt-2">
                 {String(profile.bio)}
               </p>
             ) : null}
             {profile.description ? (
-              <p className="text-sm text-gray-500 mt-1">
+              <p className="text-sm text-[var(--text-muted)] mt-1">
                 {String(profile.description)}
               </p>
             ) : null}
@@ -85,35 +85,35 @@ export default function CompetitorDetail({ data }: { data: CompetitorData }) {
       {/* KPI Cards */}
       {m && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <div className="bg-white rounded-xl border p-4">
-            <p className="text-xs text-gray-400 mb-1">Followers</p>
-            <p className="text-lg font-bold text-gray-900">
+          <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] p-4">
+            <p className="text-xs text-[var(--text-muted)] mb-1">Followers</p>
+            <p className="text-lg font-bold text-[var(--text-primary)]">
               {formatNumber(m.follower_count as number)}
             </p>
           </div>
-          <div className="bg-white rounded-xl border p-4">
-            <p className="text-xs text-gray-400 mb-1">Posts/Week</p>
-            <p className="text-lg font-bold text-gray-900">
+          <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] p-4">
+            <p className="text-xs text-[var(--text-muted)] mb-1">Posts/Week</p>
+            <p className="text-lg font-bold text-[var(--text-primary)]">
               {((m.avg_posts_per_week as number) ?? 0).toFixed(1)}
             </p>
           </div>
-          <div className="bg-white rounded-xl border p-4">
-            <p className="text-xs text-gray-400 mb-1">Viral Rate</p>
+          <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] p-4">
+            <p className="text-xs text-[var(--text-muted)] mb-1">Viral Rate</p>
             <p className="text-lg font-bold text-green-600">
               {(viralRatio * 100).toFixed(0)}%
             </p>
           </div>
-          <div className="bg-white rounded-xl border p-4">
-            <p className="text-xs text-gray-400 mb-1">Total Posts</p>
-            <p className="text-lg font-bold text-gray-900">{posts.length}</p>
+          <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] p-4">
+            <p className="text-xs text-[var(--text-muted)] mb-1">Total Posts</p>
+            <p className="text-lg font-bold text-[var(--text-primary)]">{posts.length}</p>
           </div>
         </div>
       )}
 
       {/* Performance Distribution */}
       {m && (
-        <div className="bg-white rounded-xl border p-6">
-          <h3 className="font-semibold text-gray-900 mb-4">
+        <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] p-6">
+          <h3 className="font-semibold text-[var(--text-primary)] mb-4">
             Performance Distribution
           </h3>
           <div className="flex gap-4">
@@ -124,7 +124,7 @@ export default function CompetitorDetail({ data }: { data: CompetitorData }) {
                   style={{ height: `${viralRatio * 100}%` }}
                 />
               </div>
-              <p className="text-xs text-gray-500 mt-1">Viral</p>
+              <p className="text-xs text-[var(--text-muted)] mt-1">Viral</p>
               <p className="text-sm font-semibold text-green-600">
                 {(viralRatio * 100).toFixed(0)}%
               </p>
@@ -136,8 +136,8 @@ export default function CompetitorDetail({ data }: { data: CompetitorData }) {
                   style={{ height: `${steadyRatio * 100}%` }}
                 />
               </div>
-              <p className="text-xs text-gray-500 mt-1">Steady</p>
-              <p className="text-sm font-semibold text-blue-600">
+              <p className="text-xs text-[var(--text-muted)] mt-1">Steady</p>
+              <p className="text-sm font-semibold text-blue-400">
                 {(steadyRatio * 100).toFixed(0)}%
               </p>
             </div>
@@ -148,7 +148,7 @@ export default function CompetitorDetail({ data }: { data: CompetitorData }) {
                   style={{ height: `${belowRatio * 100}%` }}
                 />
               </div>
-              <p className="text-xs text-gray-500 mt-1">Below Avg</p>
+              <p className="text-xs text-[var(--text-muted)] mt-1">Below Avg</p>
               <p className="text-sm font-semibold text-red-500">
                 {(belowRatio * 100).toFixed(0)}%
               </p>
@@ -159,27 +159,27 @@ export default function CompetitorDetail({ data }: { data: CompetitorData }) {
 
       {/* Content Strategy */}
       {s && (
-        <div className="bg-white rounded-xl border p-6">
-          <h3 className="font-semibold text-gray-900 mb-4">Content Strategy</h3>
+        <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] p-6">
+          <h3 className="font-semibold text-[var(--text-primary)] mb-4">Content Strategy</h3>
           {s.overall_strategy ? (
-            <p className="text-sm text-gray-600 mb-4">
+            <p className="text-sm text-[var(--text-secondary)] mb-4">
               {String(s.overall_strategy)}
             </p>
           ) : null}
 
           {Object.keys(pillarDist).length > 0 && (
             <div className="mb-4">
-              <p className="text-xs text-gray-400 mb-2">Content Pillars</p>
+              <p className="text-xs text-[var(--text-muted)] mb-2">Content Pillars</p>
               <div className="space-y-2">
                 {Object.entries(pillarDist)
                   .sort(([, a], [, b]) => b - a)
                   .map(([pillar, count]) => (
                     <div key={pillar} className="flex items-center gap-2">
-                      <span className="text-xs text-gray-600 w-28 truncate">
+                      <span className="text-xs text-[var(--text-secondary)] w-28 truncate">
                         {pillar}
                       </span>
                       <div className="flex-1">{pctBar(count, maxPillar)}</div>
-                      <span className="text-xs text-gray-400 w-8 text-right">
+                      <span className="text-xs text-[var(--text-muted)] w-8 text-right">
                         {count}
                       </span>
                     </div>
@@ -191,8 +191,8 @@ export default function CompetitorDetail({ data }: { data: CompetitorData }) {
           {Array.isArray(s.recommendations) &&
             (s.recommendations as string[]).length > 0 && (
               <div>
-                <p className="text-xs text-gray-400 mb-2">Recommendations</p>
-                <ul className="text-sm text-gray-600 space-y-1">
+                <p className="text-xs text-[var(--text-muted)] mb-2">Recommendations</p>
+                <ul className="text-sm text-[var(--text-secondary)] space-y-1">
                   {(s.recommendations as string[]).map((r, i) => (
                     <li key={i} className="flex gap-2">
                       <span className="text-blue-400">&#x2022;</span>
@@ -207,8 +207,8 @@ export default function CompetitorDetail({ data }: { data: CompetitorData }) {
 
       {/* Hook Performance */}
       {Object.keys(hookPerf).length > 0 && (
-        <div className="bg-white rounded-xl border p-6">
-          <h3 className="font-semibold text-gray-900 mb-4">
+        <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] p-6">
+          <h3 className="font-semibold text-[var(--text-primary)] mb-4">
             Hook Performance
           </h3>
           <div className="space-y-2">
@@ -217,13 +217,13 @@ export default function CompetitorDetail({ data }: { data: CompetitorData }) {
               .slice(0, 8)
               .map(([hook, data]) => (
                 <div key={hook} className="flex items-center gap-2">
-                  <span className="text-xs text-gray-600 w-32 truncate">
+                  <span className="text-xs text-[var(--text-secondary)] w-32 truncate">
                     {hook}
                   </span>
                   <div className="flex-1">
                     {pctBar(data.avg_rps, maxHookRps, "bg-purple-500")}
                   </div>
-                  <span className="text-xs text-gray-400 w-16 text-right">
+                  <span className="text-xs text-[var(--text-muted)] w-16 text-right">
                     {data.avg_rps.toFixed(1)} RPS
                   </span>
                 </div>
@@ -234,8 +234,8 @@ export default function CompetitorDetail({ data }: { data: CompetitorData }) {
 
       {/* Engagement Trend */}
       {engagementTrend.length > 0 && (
-        <div className="bg-white rounded-xl border p-6">
-          <h3 className="font-semibold text-gray-900 mb-4">
+        <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] p-6">
+          <h3 className="font-semibold text-[var(--text-primary)] mb-4">
             Engagement Trend
           </h3>
           <div className="flex items-end gap-1 h-32">
@@ -252,7 +252,7 @@ export default function CompetitorDetail({ data }: { data: CompetitorData }) {
                     style={{ height: `${height}%` }}
                     title={`${point.month}: ${point.avg_engagement.toFixed(0)} avg engagement (${point.post_count} posts)`}
                   />
-                  <span className="text-[9px] text-gray-400 mt-1 truncate w-full text-center">
+                  <span className="text-[9px] text-[var(--text-muted)] mt-1 truncate w-full text-center">
                     {point.month.slice(-5)}
                   </span>
                 </div>
@@ -263,8 +263,8 @@ export default function CompetitorDetail({ data }: { data: CompetitorData }) {
       )}
 
       {/* Recent Posts */}
-      <div className="bg-white rounded-xl border p-6">
-        <h3 className="font-semibold text-gray-900 mb-4">
+      <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] p-6">
+        <h3 className="font-semibold text-[var(--text-primary)] mb-4">
           Recent Posts ({sortedPosts.length})
         </h3>
         <div className="space-y-3 max-h-[600px] overflow-y-auto">
@@ -273,16 +273,16 @@ export default function CompetitorDetail({ data }: { data: CompetitorData }) {
             return (
               <div
                 key={post.id as string}
-                className="border rounded-lg p-3 hover:bg-gray-50"
+                className="border border-[var(--border-color)] rounded-lg p-3 hover:bg-[var(--bg-tertiary)]"
               >
                 <div className="flex items-start gap-3">
                   <div className="flex-1 min-w-0">
                     {post.caption ? (
-                      <p className="text-sm text-gray-700 line-clamp-2">
+                      <p className="text-sm text-[var(--text-secondary)] line-clamp-2">
                         {String(post.caption)}
                       </p>
                     ) : null}
-                    <div className="flex items-center gap-3 mt-2 text-xs text-gray-400">
+                    <div className="flex items-center gap-3 mt-2 text-xs text-[var(--text-muted)]">
                       <span>{post.content_type as string}</span>
                       {post.posted_at ? (
                         <span>
@@ -293,23 +293,23 @@ export default function CompetitorDetail({ data }: { data: CompetitorData }) {
                         <span
                           className={`px-1.5 py-0.5 rounded text-[10px] font-medium ${
                             post.viral_classification === "viral"
-                              ? "bg-green-100 text-green-600"
+                              ? "bg-green-500/10 text-green-400"
                               : post.viral_classification === "steady"
-                              ? "bg-blue-100 text-blue-600"
-                              : "bg-gray-100 text-gray-500"
+                              ? "bg-blue-500/10 text-blue-400"
+                              : "bg-[var(--bg-tertiary)] text-[var(--text-muted)]"
                           }`}
                         >
                           {String(post.viral_classification)}
                         </span>
                       ) : null}
                       {analysis?.content_pillar ? (
-                        <span className="bg-purple-50 text-purple-600 px-1.5 py-0.5 rounded text-[10px]">
+                        <span className="bg-purple-500/10 text-purple-400 px-1.5 py-0.5 rounded text-[10px]">
                           {String(analysis.content_pillar)}
                         </span>
                       ) : null}
                     </div>
                   </div>
-                  <div className="text-right text-xs text-gray-400 whitespace-nowrap">
+                  <div className="text-right text-xs text-[var(--text-muted)] whitespace-nowrap">
                     <p>
                       {formatNumber(post.likes as number)} likes
                     </p>

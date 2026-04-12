@@ -31,22 +31,20 @@ export default async function CompetitorPage({
     error = e instanceof Error ? e.message : "Failed to load competitor";
   }
 
-  const profile = data?.profile;
-
   return (
     <PortalShell user={user}>
-      <div className="mb-6">
+      <div className="mb-4">
         <a
           href="/social"
-          className="text-sm text-gray-400 hover:text-gray-600"
+          className="text-xs text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors"
         >
           &larr; Back to competitors
         </a>
       </div>
 
-      {error || !data || !profile ? (
-        <div className="bg-white rounded-xl border p-12 text-center">
-          <p className="text-red-500">{error || "Competitor not found"}</p>
+      {error || !data ? (
+        <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] p-12 text-center">
+          <p className="text-sm text-[var(--color-error)]">{error || "Competitor not found"}</p>
         </div>
       ) : (
         <CompetitorDetail data={data} />

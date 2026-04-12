@@ -30,40 +30,37 @@ export default async function ArtifactDetailPage({
 
   return (
     <PortalShell user={user}>
-      <div className="mb-6">
+      <div className="mb-4">
         <a
           href="/artifacts"
-          className="text-sm text-gray-400 hover:text-gray-600"
+          className="text-xs text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors"
         >
           &larr; Back to artifacts
         </a>
       </div>
 
       {error || !artifact ? (
-        <div className="bg-white rounded-xl border p-12 text-center">
-          <p className="text-red-500">{error || "Artifact not found"}</p>
+        <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] p-12 text-center">
+          <p className="text-sm text-[var(--color-error)]">{error || "Artifact not found"}</p>
         </div>
       ) : (
-        <div className="space-y-6">
+        <div className="space-y-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">
+            <h1 className="text-lg font-semibold text-[var(--text-primary)]">
               {artifact.title}
             </h1>
-            <div className="flex items-center gap-3 mt-2 text-sm text-gray-400">
+            <div className="flex items-center gap-3 mt-2 text-xs text-[var(--text-muted)]">
               {artifact.artifact_type && (
-                <span className="bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full text-xs">
+                <span className="bg-[var(--bg-tertiary)] text-[var(--text-secondary)] px-2 py-0.5 rounded-full text-[10px]">
                   {artifact.artifact_type}
                 </span>
               )}
               <span>
                 {new Date(artifact.created_at).toLocaleDateString()}
               </span>
-              {artifact.portal_shared_by && (
-                <span>Shared by {artifact.portal_shared_by}</span>
-              )}
             </div>
             {artifact.summary && (
-              <p className="text-gray-500 mt-3">{artifact.summary}</p>
+              <p className="text-sm text-[var(--text-secondary)] mt-3">{artifact.summary}</p>
             )}
           </div>
 

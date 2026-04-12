@@ -12,9 +12,9 @@ function timeAgo(dateStr: string): string {
 }
 
 const TYPE_COLORS: Record<string, string> = {
-  report: "bg-blue-100 text-blue-700",
-  dashboard: "bg-purple-100 text-purple-700",
-  campaign: "bg-green-100 text-green-700",
+  report: "bg-blue-500/10 text-blue-400",
+  dashboard: "bg-purple-500/10 text-purple-400",
+  campaign: "bg-green-500/10 text-green-400",
 };
 
 export default function ArtifactCard({
@@ -23,20 +23,20 @@ export default function ArtifactCard({
   artifact: ArtifactListItem;
 }) {
   const typeColor =
-    TYPE_COLORS[artifact.artifact_type || ""] || "bg-gray-100 text-gray-600";
+    TYPE_COLORS[artifact.artifact_type || ""] || "bg-[var(--bg-tertiary)] text-[var(--text-muted)]";
 
   return (
     <a
       href={`/artifacts/${artifact.id}`}
-      className="block bg-white rounded-xl border hover:border-henry-500 hover:shadow-md transition-all p-5"
+      className="block rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] hover:border-[var(--color-accent)] hover:bg-[var(--bg-tertiary)] transition-all p-4"
     >
       <div className="flex items-start justify-between gap-2 mb-2">
-        <h3 className="font-semibold text-gray-900 line-clamp-2">
+        <h3 className="text-sm font-medium text-[var(--text-primary)] line-clamp-2">
           {artifact.title}
         </h3>
         {artifact.artifact_type && (
           <span
-            className={`text-xs font-medium px-2 py-0.5 rounded-full whitespace-nowrap ${typeColor}`}
+            className={`text-[10px] font-medium px-2 py-0.5 rounded-full whitespace-nowrap ${typeColor}`}
           >
             {artifact.artifact_type}
           </span>
@@ -44,12 +44,12 @@ export default function ArtifactCard({
       </div>
 
       {artifact.summary && (
-        <p className="text-sm text-gray-500 line-clamp-3 mb-3">
+        <p className="text-xs text-[var(--text-secondary)] line-clamp-2 mb-3">
           {artifact.summary}
         </p>
       )}
 
-      <div className="flex items-center justify-between text-xs text-gray-400">
+      <div className="flex items-center justify-between text-[10px] text-[var(--text-muted)]">
         <span>
           {artifact.portal_shared_at
             ? timeAgo(artifact.portal_shared_at)
@@ -60,7 +60,7 @@ export default function ArtifactCard({
             {artifact.tags.slice(0, 3).map((tag) => (
               <span
                 key={tag}
-                className="bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded"
+                className="bg-[var(--bg-tertiary)] text-[var(--text-muted)] px-1.5 py-0.5 rounded"
               >
                 {tag}
               </span>

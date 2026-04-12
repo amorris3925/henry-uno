@@ -50,26 +50,26 @@ export default function CommentsPanel({
   }
 
   return (
-    <div className="bg-white rounded-xl border p-6">
-      <h3 className="font-semibold text-gray-900 mb-4">Comments</h3>
+    <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] p-5">
+      <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Comments</h3>
 
       {loading ? (
-        <p className="text-sm text-gray-400">Loading...</p>
+        <p className="text-xs text-[var(--text-muted)]">Loading...</p>
       ) : comments.length === 0 ? (
-        <p className="text-sm text-gray-400 mb-4">No comments yet</p>
+        <p className="text-xs text-[var(--text-muted)] mb-4">No comments yet</p>
       ) : (
-        <div className="space-y-4 mb-4">
+        <div className="space-y-3 mb-4">
           {comments.map((c) => (
-            <div key={c.id} className="border-l-2 border-gray-200 pl-3">
-              <div className="flex items-center gap-2 text-xs text-gray-400 mb-1">
-                <span className="font-medium text-gray-600">
+            <div key={c.id} className="border-l-2 border-[var(--border-color)] pl-3">
+              <div className="flex items-center gap-2 text-[10px] text-[var(--text-muted)] mb-1">
+                <span className="font-medium text-[var(--text-secondary)]">
                   {c.author_name}
                 </span>
                 <span>
                   {new Date(c.created_at).toLocaleDateString()}
                 </span>
               </div>
-              <p className="text-sm text-gray-700">{c.content}</p>
+              <p className="text-xs text-[var(--text-secondary)]">{c.content}</p>
             </div>
           ))}
         </div>
@@ -81,13 +81,13 @@ export default function CommentsPanel({
           value={content}
           onChange={(e) => setContent(e.target.value)}
           placeholder="Add a comment..."
-          className="flex-1 px-3 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-henry-500 focus:border-henry-500 outline-none"
+          className="flex-1 px-3 py-2 text-sm rounded-md border border-[var(--border-color)] bg-[var(--bg-primary)] text-[var(--text-primary)] outline-none focus:border-[var(--color-accent)] transition-colors placeholder:text-[var(--text-muted)]"
           disabled={posting}
         />
         <button
           type="submit"
           disabled={posting || !content.trim()}
-          className="px-4 py-2 bg-henry-500 text-white text-sm rounded-lg font-medium hover:bg-henry-600 disabled:opacity-50 transition-colors"
+          className="px-4 py-2 text-sm rounded-md bg-[var(--color-accent)] text-white font-medium hover:bg-[var(--color-accent-hover)] disabled:opacity-50 transition-colors"
         >
           Send
         </button>

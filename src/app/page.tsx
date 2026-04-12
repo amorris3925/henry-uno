@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 export default async function Home() {
   const user = await getSession();
   if (user) {
-    redirect("/dashboard");
+    redirect("/artifacts");
   }
   redirect("/login");
 }
