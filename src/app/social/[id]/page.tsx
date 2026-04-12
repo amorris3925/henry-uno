@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { getSession } from "@/lib/auth";
 import { portalApi } from "@/lib/api";
 import PortalShell from "@/components/PortalShell";
-import CompetitorDetail from "@/components/CompetitorDetail";
+import { CreatorDeepDive } from "@/components/CreatorDeepDive";
 
 export default async function CompetitorPage({
   params,
@@ -47,7 +47,13 @@ export default async function CompetitorPage({
           <p className="text-sm text-[var(--color-error)]">{error || "Competitor not found"}</p>
         </div>
       ) : (
-        <CompetitorDetail data={data} />
+        <CreatorDeepDive
+          metrics={data.metrics}
+          strategies={data.strategy}
+          posts={data.posts}
+          profile={data.profile}
+          analysisMap={new Map(data.analyses.map((a) => [a.post_id as string, a]))}
+        />
       )}
     </PortalShell>
   );
