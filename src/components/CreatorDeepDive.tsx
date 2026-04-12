@@ -755,7 +755,7 @@ export function CreatorDeepDive({ metrics, strategies, posts, profile, analysisM
       <VisualConsistency
         score={m.visual_consistency_score as number | null}
         notes={m.visual_consistency_notes as string | null}
-        posts={filteredPosts.filter((p: any) => p.image_storage_path).slice(0, 20)}
+        posts={filteredPosts.filter((p: any) => p.image_url || p.image_storage_path).slice(0, 20)}
         analysisMap={analysisMap}
       />
     </div>
@@ -1632,7 +1632,7 @@ function VisualConsistency({ score, notes, posts, analysisMap }: {
       {posts.length > 0 && (
         <div className="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-1 mb-3">
           {posts.map((post: any) => {
-            const url = storageUrl(post.image_storage_path)
+            const url = post.image_url || storageUrl(post.image_storage_path)
             const analysis = analysisMap?.get(post.id)
             const tip = analysis
               ? `@${post.profile_handle} · ${post.content_type}\n\n${formatAnalysisTip(analysis)}`
