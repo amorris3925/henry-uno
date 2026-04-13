@@ -1149,6 +1149,21 @@ function EngagementTrend({
 
   if (!effectiveData || effectiveData.length < 2) return null
 
+  // Detect leading flat span: consecutive months from the start where avg_engagement
+  // is near-zero relative to peak. Instagram only exposed Reel view counts starting
+  // ~late 2022, so pre-Reels posts have no views data and their RPS collapses to
+  // near-zero against a creator mean now dominated by post-2023 Reels.
+  const maxEng = Math.max(...effectiveData.map((d) => d.avg_engagement))
+  const flatThreshold = maxEng * 0.1
+  let flatEndIdx = 0
+  for (let i = 0; i < effectiveData.length; i++) {
+    if (effectiveData[i].avg_engagement >= flatThreshold) break
+    flatEndIdx = i + 1
+  }
+  const hasFlatSpan = flatEndIdx >= 6 && flatEndIdx < effectiveData.length - 1
+  const flatSpanStart = hasFlatSpan ? effectiveData[0].month.slice(0, 7) : null
+  const flatSpanEnd = hasFlatSpan ? effectiveData[flatEndIdx - 1].month.slice(0, 7) : null
+
   const chartData = {
     labels: effectiveData.map((d) => d.month.slice(0, 7)),
     datasets: [
@@ -1175,6 +1190,38 @@ function EngagementTrend({
       },
     ],
   }
+
+  const flatSpanPlugin = hasFlatSpan
+    ? {
+        id: 'flatSpanShading',
+        afterDraw(chart: { ctx: CanvasRenderingContext2D; chartArea: { top: number; bottom: number; left: number; right: number }; scales: Record<string, { getPixelForValue: (v: number) => number }> }) {
+          const { ctx, chartArea, scales } = chart
+          const xScale = scales.x
+          if (!xScale) return
+          const xStart = Math.max(xScale.getPixelForValue(0), chartArea.left)
+          const xEnd = Math.min(xScale.getPixelForValue(flatEndIdx - 0.5), chartArea.right)
+          if (xEnd <= xStart) return
+          ctx.save()
+          ctx.fillStyle = 'rgba(245, 158, 11, 0.07)'
+          ctx.fillRect(xStart, chartArea.top, xEnd - xStart, chartArea.bottom - chartArea.top)
+          ctx.strokeStyle = 'rgba(245, 158, 11, 0.35)'
+          ctx.setLineDash([3, 3])
+          ctx.lineWidth = 1
+          ctx.beginPath()
+          ctx.moveTo(xEnd, chartArea.top)
+          ctx.lineTo(xEnd, chartArea.bottom)
+          ctx.stroke()
+          ctx.setLineDash([])
+          ctx.fillStyle = 'rgba(252, 211, 77, 0.85)'
+          ctx.font = '10px sans-serif'
+          ctx.textAlign = 'center'
+          const label = 'Instagram view counts unavailable'
+          ctx.fillText(label, (xStart + xEnd) / 2, chartArea.top + 12)
+          ctx.restore()
+        },
+      }
+    : null
+
   return (
     <Panel>
       <div className="flex items-center justify-between mb-1">
@@ -1190,15 +1237,24 @@ function EngagementTrend({
         </div>
       </div>
       <div className="h-40">
-        <Line data={chartData} options={{
-          ...CHART_OPTS_COMPACT,
-          scales: {
-            x: { ...CHART_OPTS_COMPACT.scales.x },
-            y: { ...CHART_OPTS_COMPACT.scales.y, position: 'left' as const },
-            y1: { ...CHART_OPTS_COMPACT.scales.y, position: 'right' as const, grid: { display: false } },
-          },
-        }} />
+        <Line
+          data={chartData}
+          options={{
+            ...CHART_OPTS_COMPACT,
+            scales: {
+              x: { ...CHART_OPTS_COMPACT.scales.x },
+              y: { ...CHART_OPTS_COMPACT.scales.y, position: 'left' as const },
+              y1: { ...CHART_OPTS_COMPACT.scales.y, position: 'right' as const, grid: { display: false } },
+            },
+          }}
+          plugins={flatSpanPlugin ? [flatSpanPlugin] : []}
+        />
       </div>
+      {hasFlatSpan && (
+        <div className="mt-1 text-[10px] text-amber-300/70">
+          {flatSpanStart} → {flatSpanEnd}: Meta didn&apos;t expose Reel view counts until late 2022. Earlier posts had real engagement (likes + comments) but their relative score collapses against a mean now dominated by post-2023 Reels.
+        </div>
+      )}
       {inflections && inflections.length > 0 && filter === 'all' && (
         <div className="flex flex-wrap gap-1 mt-2">
           {inflections.map((p: any, i: number) => (

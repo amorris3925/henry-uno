@@ -233,34 +233,60 @@ export default function CompetitorDetail({ data }: { data: CompetitorData }) {
       )}
 
       {/* Engagement Trend */}
-      {engagementTrend.length > 0 && (
-        <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] p-6">
-          <h3 className="font-semibold text-[var(--text-primary)] mb-4">
-            Engagement Trend
-          </h3>
-          <div className="flex items-end gap-1 h-32">
-            {engagementTrend.map((point, i) => {
-              const maxEng = Math.max(
-                ...engagementTrend.map((p) => p.avg_engagement),
-                1
-              );
-              const height = (point.avg_engagement / maxEng) * 100;
-              return (
-                <div key={i} className="flex-1 flex flex-col items-center">
-                  <div
-                    className="w-full bg-blue-400 rounded-t min-h-[2px]"
-                    style={{ height: `${height}%` }}
-                    title={`${point.month}: ${point.avg_engagement.toFixed(0)} avg engagement (${point.post_count} posts)`}
-                  />
-                  <span className="text-[9px] text-[var(--text-muted)] mt-1 truncate w-full text-center">
-                    {point.month.slice(-5)}
+      {engagementTrend.length > 0 && (() => {
+        const maxEng = Math.max(...engagementTrend.map((p) => p.avg_engagement), 1);
+        const flatThreshold = maxEng * 0.1;
+        let flatEndIdx = 0;
+        for (let i = 0; i < engagementTrend.length; i++) {
+          if (engagementTrend[i].avg_engagement >= flatThreshold) break;
+          flatEndIdx = i + 1;
+        }
+        const hasFlatSpan = flatEndIdx >= 6 && flatEndIdx < engagementTrend.length - 1;
+        const flatSpanStart = hasFlatSpan ? engagementTrend[0].month.slice(0, 7) : null;
+        const flatSpanEnd = hasFlatSpan ? engagementTrend[flatEndIdx - 1].month.slice(0, 7) : null;
+        return (
+          <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] p-6">
+            <h3 className="font-semibold text-[var(--text-primary)] mb-4">
+              Engagement Trend
+            </h3>
+            <div className="relative flex items-end gap-1 h-32">
+              {hasFlatSpan && (
+                <div
+                  className="absolute top-0 bottom-0 pointer-events-none border-r border-dashed border-amber-500/40 bg-amber-500/5 flex items-start justify-center"
+                  style={{
+                    left: 0,
+                    width: `${(flatEndIdx / engagementTrend.length) * 100}%`,
+                  }}
+                >
+                  <span className="text-[9px] text-amber-300/80 mt-1 px-1 whitespace-nowrap">
+                    Instagram view counts unavailable
                   </span>
                 </div>
-              );
-            })}
+              )}
+              {engagementTrend.map((point, i) => {
+                const height = (point.avg_engagement / maxEng) * 100;
+                return (
+                  <div key={i} className="flex-1 flex flex-col items-center">
+                    <div
+                      className="w-full bg-blue-400 rounded-t min-h-[2px]"
+                      style={{ height: `${height}%` }}
+                      title={`${point.month}: ${point.avg_engagement.toFixed(0)} avg engagement (${point.post_count} posts)`}
+                    />
+                    <span className="text-[9px] text-[var(--text-muted)] mt-1 truncate w-full text-center">
+                      {point.month.slice(-5)}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+            {hasFlatSpan && (
+              <p className="mt-2 text-[10px] text-amber-300/70">
+                {flatSpanStart} → {flatSpanEnd}: Meta didn&apos;t expose Reel view counts until late 2022. Earlier posts had real engagement (likes + comments) but their relative score collapses against a mean now dominated by post-2023 Reels.
+              </p>
+            )}
           </div>
-        </div>
-      )}
+        );
+      })()}
 
       {/* Recent Posts */}
       <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] p-6">
