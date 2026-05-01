@@ -15,6 +15,7 @@ const TYPE_COLORS: Record<string, string> = {
   report: "bg-blue-500/10 text-blue-400",
   dashboard: "bg-purple-500/10 text-purple-400",
   campaign: "bg-green-500/10 text-green-400",
+  fathom_recap: "bg-amber-500/10 text-amber-400",
 };
 
 export default function ArtifactCard({
@@ -25,9 +26,13 @@ export default function ArtifactCard({
   const typeColor =
     TYPE_COLORS[artifact.artifact_type || ""] || "bg-[var(--bg-tertiary)] text-[var(--text-muted)]";
 
+  const isRecap = artifact.artifact_type === "fathom_recap";
+  const basePath = isRecap ? "/recaps" : "/artifacts";
+  const handle = artifact.slug || artifact.id;
+
   return (
     <a
-      href={`/artifacts/${artifact.id}`}
+      href={`${basePath}/${handle}`}
       className="block rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] hover:border-[var(--color-accent)] hover:bg-[var(--bg-tertiary)] transition-all p-4"
     >
       <div className="flex items-start justify-between gap-2 mb-2">
