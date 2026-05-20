@@ -30,6 +30,16 @@ export default function ArtifactCard({
   const basePath = isRecap ? "/recaps" : "/artifacts";
   const handle = artifact.slug || artifact.id;
 
+  const tags = artifact.tags || [];
+  // Provenance: surface where the artifact came from (repo:/source: tags).
+  const repoTag = tags.find((t) => t.startsWith("repo:"));
+  const sourceTag = tags.find((t) => t.startsWith("source:"));
+  const provenance = (repoTag || sourceTag)
+    ? (repoTag ? repoTag.slice("repo:".length) : sourceTag!.slice("source:".length))
+    : null;
+  // Remaining tags shown as plain chips (exclude the ones rendered as provenance).
+  const otherTags = tags.filter((t) => t !== repoTag && t !== sourceTag);
+
   return (
     <a
       href={`${basePath}/${handle}`}
@@ -54,15 +64,22 @@ export default function ArtifactCard({
         </p>
       )}
 
-      <div className="flex items-center justify-between text-[10px] text-[var(--text-muted)]">
-        <span>
-          {artifact.portal_shared_at
-            ? timeAgo(artifact.portal_shared_at)
-            : timeAgo(artifact.created_at)}
+      <div className="flex items-center justify-between gap-2 text-[10px] text-[var(--text-muted)]">
+        <span className="flex items-center gap-1.5 min-w-0">
+          <span className="whitespace-nowrap">
+            {artifact.portal_shared_at
+              ? timeAgo(artifact.portal_shared_at)
+              : timeAgo(artifact.created_at)}
+          </span>
+          {provenance && (
+            <span className="truncate text-[var(--text-secondary)] bg-[var(--bg-tertiary)] px-1.5 py-0.5 rounded whitespace-nowrap">
+              from {provenance}
+            </span>
+          )}
         </span>
-        {artifact.tags && artifact.tags.length > 0 && (
+        {otherTags.length > 0 && (
           <div className="flex gap-1">
-            {artifact.tags.slice(0, 3).map((tag) => (
+            {otherTags.slice(0, 3).map((tag) => (
               <span
                 key={tag}
                 className="bg-[var(--bg-tertiary)] text-[var(--text-muted)] px-1.5 py-0.5 rounded"

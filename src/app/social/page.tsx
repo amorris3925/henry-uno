@@ -18,6 +18,7 @@ export default async function SocialPage() {
   if (!user) redirect("/login");
 
   let competitors: Competitor[] = [];
+  let loadError = false;
   try {
     const data = await portalApi<{ competitors: Competitor[] }>(
       "/portal-api/social/competitors",
@@ -25,7 +26,7 @@ export default async function SocialPage() {
     );
     competitors = data.competitors || [];
   } catch {
-    // empty state
+    loadError = true;
   }
 
   return (
@@ -34,14 +35,31 @@ export default async function SocialPage() {
         <h1 className="text-lg font-semibold text-[var(--text-primary)]">
           Social Media
         </h1>
-        {competitors.length > 0 && (
+        {!loadError && competitors.length > 0 && (
           <p className="text-xs text-[var(--text-muted)] mt-1">
             {competitors.length} competitor{competitors.length !== 1 ? "s" : ""} shared with you
           </p>
         )}
       </div>
 
-      {competitors.length === 0 ? (
+      {loadError ? (
+        <div className="rounded-xl border border-red-500/30 bg-red-500/5 p-16 text-center">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="mx-auto mb-3 opacity-70 text-red-400">
+            <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+            <line x1="12" y1="9" x2="12" y2="13" />
+            <line x1="12" y1="17" x2="12.01" y2="17" />
+          </svg>
+          <p className="text-sm text-[var(--text-secondary)]">
+            Couldn&apos;t load your competitor profiles — please refresh or try again.
+          </p>
+          <a
+            href="/social"
+            className="mt-4 inline-block text-xs text-[var(--color-accent)] hover:underline"
+          >
+            Refresh
+          </a>
+        </div>
+      ) : competitors.length === 0 ? (
         <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-secondary)] p-16 text-center">
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="mx-auto mb-3 opacity-40 text-[var(--text-muted)]">
             <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
